@@ -1,13 +1,26 @@
 pipeline {
-agent any;
-stages {
-stage("git hub cloning")
-steps{
-
-}
-}
-
-
-
-
+    agent any;
+    stages{
+        stage("git hub clone")
+        steps{
+            checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'eks-project-id', url: 'git@github.com:lakshmi021/devops14.git']])
+        }
+    }
+    stages{
+        stage("terraform init")
+        steps{
+            sh 'terraform init'
+        }
+    }
+    stages{
+        stage("terraform plan")
+        steps{
+           sh 'terraform plan'
+        }
+    }
+    stages{
+        stage("terraform apply")
+        steps{
+            sh 'terraform apply --auto-approve'
+    }
 }
